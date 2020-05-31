@@ -42,7 +42,6 @@ public class Player {
 
     public int getAttackPower() { return attackPower; }
 
-
     public void changeDamage(int n) {
         attackPower += n;
     }
