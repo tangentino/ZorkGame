@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+        Game game = new Game();
         Scanner scanner = new Scanner(System.in);
         String cmd = "";
         while(true) {
@@ -16,7 +17,7 @@ public class Main {
             String[] words = cmd.split(" ");
             Command command = CommandFactory.getCommand(words[0]);
             if (command != null) {
-                command.execute(words.length == 1 ? null : words[1]);
+                command.execute(words.length == 1 ? null : words[1],game);
             }
         }
     }
