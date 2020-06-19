@@ -1,7 +1,23 @@
 package io.muzoo.ooc.homework2.command;
 
-import io.muzoo.ooc.homework2.Game;
+public class Command {
+    private String commandWord;
+    private String argument;
 
-public interface Command {
-    void execute(String cmd, Game game);
+    public Command(String word, String arg) {
+        commandWord = word;
+        argument = arg;
+    }
+
+    public String getCommandWord() {
+        return commandWord;
+    }
+
+    public String getArgument() {
+        return argument;
+    }
+
+    public boolean hasArgument() {
+        return (argument != null);
+    }
 }
