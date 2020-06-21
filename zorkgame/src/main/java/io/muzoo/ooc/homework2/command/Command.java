@@ -20,4 +20,8 @@ public class Command {
     public boolean hasArgument() {
         return (argument != null);
     }
+
+    public boolean isValid() {
+        return (commandWord != null);
+    }
 }
