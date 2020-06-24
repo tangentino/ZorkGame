@@ -71,6 +71,5 @@ public class Room {
     public void removeMonster() {
         monster = null;
     }
-
-
+    
 }
