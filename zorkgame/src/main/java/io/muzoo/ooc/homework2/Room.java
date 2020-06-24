@@ -6,14 +6,14 @@ import java.util.HashMap;
 
 public class Room {
     private Monster monster; // Room's monster
-    private HashMap<String,Item> itemList; // List of items in room
+    private Item item; // List of items in room
     public HashMap<String,Room> neighbors; // Neighboring rooms
     private String description; // description of room
 
     public Room(String description) {
         this.description = description;
         neighbors = new HashMap<String,Room>();
-        itemList = new HashMap<String,Item>();
+        item = null;
         this.monster = null;
     }
 
@@ -42,22 +42,19 @@ public class Room {
         return ans;
     }
 
-    public void addItem(Item item) {
-        itemList.put(item.getName(),item);
+    public void setItem(Item item) {
+        this.item  = item;
     }
 
     public void removeItem(Item item) {
-        itemList.remove(item.getName());
+        this.item = item;
     }
 
-    public String showItems() {
-        // Displays string showing all items
-        String ans = "ITEMS: ";
-        for (String item : itemList.keySet()) {
-            ans += "| " + item + " |";
-        }
-        return ans;
+    public Item getItem() {
+        return item;
     }
+
+    public Monster getMonster() { return monster; }
 
     public void setMonster(Monster m) {
         monster = m;
