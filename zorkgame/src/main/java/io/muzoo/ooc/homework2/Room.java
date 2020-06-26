@@ -46,8 +46,8 @@ public class Room {
         this.item  = item;
     }
 
-    public void removeItem(Item item) {
-        this.item = item;
+    public void removeItem() {
+        this.item = null;
     }
 
     public Item getItem() {

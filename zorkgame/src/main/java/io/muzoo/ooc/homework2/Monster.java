@@ -14,6 +14,8 @@ public class Monster {
         attackPower = damage;
     }
 
+    public boolean isDead() { return currentHP <= 0; }
+
     public int getCurrentHP() { return currentHP; }
 
     public int getMaxHP() { return maxHP; }
@@ -24,6 +26,9 @@ public class Monster {
         int newHP = currentHP + n;
         if (newHP > maxHP) {
             currentHP = maxHP;
+        }
+        else if (newHP < 0) {
+            currentHP = 0;
         }
         else {
             currentHP = newHP;

@@ -33,7 +33,14 @@ public class Player {
     }
 
     public Item getItem(String name) {
-        return inventory.get(name);
+        if (inventory.containsKey(name)) {
+            return inventory.get(name);
+        }
+        return null;
+    }
+
+    public void removeItem(String name) {
+        inventory.remove(name);
     }
 
     public int getCurrentHP() { return currentHP; }

@@ -6,7 +6,12 @@ public class ExitCommand implements Command {
 
     @Override
     public void execute(String cmd, Game game) {
-        System.out.println("Exit complete");
-        System.exit(0);
+        if (game.isRunning()) {
+            System.out.println("Command only available in menu");
+        }
+        else {
+            System.out.println("Exit complete");
+            System.exit(0);
+        }
     }
 }
