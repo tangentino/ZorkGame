@@ -10,8 +10,8 @@ public class Room {
     public HashMap<String,Room> neighbors; // Neighboring rooms
     private String description; // description of room
 
-    public Room(String description) {
-        this.description = description;
+    public Room() {
+        // this.description = description;
         neighbors = new HashMap<String,Room>();
         item = null;
         this.monster = null;

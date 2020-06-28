@@ -25,7 +25,7 @@ public class CommandFactory {
         return cmdMap.get(cmd);
     }
 
-    public boolean isCommand(String cmd) {
+    public static boolean isCommand(String cmd) {
         return cmdMap.containsKey(cmd);
     }
 }

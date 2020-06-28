@@ -10,7 +10,7 @@ public class ExitCommand implements Command {
             System.out.println("Command only available in menu");
         }
         else {
-            System.out.println("Exit complete");
+            System.out.println("Successfully quit game");
             System.exit(0);
         }
     }

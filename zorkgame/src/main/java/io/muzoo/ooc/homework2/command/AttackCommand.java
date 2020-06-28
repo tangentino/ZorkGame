@@ -7,7 +7,7 @@ public class AttackCommand implements Command {
     public void execute(String cmd, Game game) {
         if (cmd != null) {
             if (game.isRunning()) {
-                game.goRoom(cmd);
+                game.attackMonster(cmd.toUpperCase());
             } else {
                 System.out.println("Command only available in game");
             }

@@ -8,7 +8,7 @@ public class DropCommand implements Command {
     public void execute(String cmd, Game game) {
         if (cmd != null) {
             if (game.isRunning()) {
-                game.dropItem(cmd);
+                game.dropItem(cmd.toUpperCase());
             } else {
                 System.out.println("Command only available in game");
             }
