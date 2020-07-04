@@ -1,6 +1,7 @@
 package io.muzoo.ooc.homework2;
 
 import io.muzoo.ooc.homework2.item.Item;
+import io.muzoo.ooc.homework2.item.Weapon;
 
 import java.util.HashMap;
 
@@ -16,6 +17,8 @@ public class Player {
         currentHP = health;
         attackPower = power;
         inventory = new HashMap<>();
+        Item fists = new Weapon("FISTS",10);
+        addItem(fists);
     }
 
     public void changeHealth(int n) {
@@ -28,12 +31,31 @@ public class Player {
         }
     }
 
+    public boolean isDead() {
+        return currentHP <= 0;
+    }
+
+    public String showInventory() {
+        return inventory.keySet().toString();
+    }
+
     public void addItem(Item item) {
         inventory.put(item.getName(),item);
     }
 
     public Item getItem(String name) {
-        return inventory.get(name);
+        if (hasItem(name)) {
+            return inventory.get(name);
+        }
+        return null;
+    }
+
+    public boolean hasItem(String name) {
+        return inventory.containsKey(name);
+    }
+
+    public void removeItem(String name) {
+        inventory.remove(name);
     }
 
     public int getCurrentHP() { return currentHP; }
@@ -42,7 +64,7 @@ public class Player {
 
     public int getAttackPower() { return attackPower; }
 
-    public void changeDamage(int n) {
+    public void changeAttackPower(int n) {
         attackPower += n;
     }
 
