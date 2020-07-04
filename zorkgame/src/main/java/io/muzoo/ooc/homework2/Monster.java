@@ -2,16 +2,20 @@ package io.muzoo.ooc.homework2;
 
 public class Monster {
 
-    private String name;
     private int maxHP;
     private int currentHP;
     private int attackPower;
+    private String name;
 
     public Monster(String name, int health, int damage) {
         this.name = name;
         maxHP = health;
         currentHP = health;
         attackPower = damage;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean isDead() { return currentHP <= 0; }
@@ -33,10 +37,6 @@ public class Monster {
         else {
             currentHP = newHP;
         }
-    }
-
-    public void changeName(String name) {
-        this.name = name;
     }
 
     public void changeDamage(int n) {

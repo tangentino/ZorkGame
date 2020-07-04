@@ -8,8 +8,11 @@ public class PlayCommand implements Command {
         if (game.isRunning()) {
             System.out.println("Command only available in menu");
         }
+        else if (cmd == null) {
+            System.out.println("Please enter a map to play");
+        }
         else {
-            game.playGame();
+            game.setGameMap(cmd.toLowerCase());
         }
     }
 }

@@ -31,6 +31,10 @@ public class Player {
         }
     }
 
+    public boolean isDead() {
+        return currentHP <= 0;
+    }
+
     public String showInventory() {
         return inventory.keySet().toString();
     }

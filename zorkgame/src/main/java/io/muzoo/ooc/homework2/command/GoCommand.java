@@ -10,7 +10,7 @@ public class GoCommand implements Command {
                 System.out.println("Please give a valid direction!");
             }
             else {
-                game.goRoom(cmd.toUpperCase());
+                game.goRoom(cmd.toLowerCase());
             }
         }
         else {

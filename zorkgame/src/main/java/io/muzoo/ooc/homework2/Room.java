@@ -8,10 +8,10 @@ public class Room {
     private Monster monster; // Room's monster
     private Item item; // List of items in room
     public HashMap<String,Room> neighbors; // Neighboring rooms
-    private String description; // description of room
+    private String name; // description of room
 
-    public Room() {
-        // this.description = description;
+    public Room(String name) {
+        this.name = name;
         neighbors = new HashMap<String,Room>();
         item = null;
         this.monster = null;
@@ -27,9 +27,9 @@ public class Room {
         return neighbors.get(direction);
     }
 
-    public String getDescription() {
+    public String getName() {
         // get description of room
-        return description;
+        return name;
     }
 
     public String showExits() {

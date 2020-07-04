@@ -4,24 +4,25 @@ import io.muzoo.ooc.homework2.command.Command;
 import io.muzoo.ooc.homework2.command.CommandFactory;
 import io.muzoo.ooc.homework2.item.Item;
 import io.muzoo.ooc.homework2.item.Weapon;
+import io.muzoo.ooc.homework2.map.FantasyMap;
+import io.muzoo.ooc.homework2.map.GameMap;
 
+import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
     private Player player;
     private Room currentRoom;
     private boolean running;
-    private GameMap map;
+    private GameMap gameMap;
 
     // To-do list
-    // MAPS
     // load save?
 
 
     public Game() {
         player = new Player(100,25);
-        map = new GameMap();
-        currentRoom = map.createMap();
     }
 
     public boolean isRunning() { return running; }
@@ -32,6 +33,23 @@ public class Game {
         System.out.println("Type 'help' to see all the available commands");
         while (!running) {
             parseCommand();
+        }
+    }
+
+    public void printMap() {
+        gameMap.printMap();
+        System.out.println("[CURRENT ROOM]: "+currentRoom.getName());
+    }
+
+    public void setGameMap(String name) {
+        switch (name) {
+            case "fantasy":
+                gameMap = new FantasyMap();
+                currentRoom = gameMap.getStartingRoom();
+                playGame();
+                break;
+            default:
+                System.out.println("Please enter a valid map!");
         }
     }
 
@@ -49,6 +67,7 @@ public class Game {
     }
 
     public void printInfo() {
+        Monster monster = currentRoom.getMonster();
         System.out.println("=============================================");
         System.out.println("[PLAYER STATS]:");
         System.out.println("Health - "+player.getCurrentHP()+"/"+player.getMaxHP());
@@ -56,10 +75,9 @@ public class Game {
         System.out.println("Inventory - "+player.showInventory());
         System.out.println("=============================================");
         System.out.println("=============================================");
-        System.out.println("CURRENT ROOM INFO");
+        System.out.println("CURRENT ROOM: "+currentRoom.getName());
         System.out.println("---------------------------------------------");
-        System.out.println("[MONSTER]:");
-        Monster monster = currentRoom.getMonster();
+        System.out.println("[MONSTER]: "+monster.getName());
         Item item = currentRoom.getItem();
         if (monster == null) {
             System.out.println("No monster in this room");
@@ -89,7 +107,7 @@ public class Game {
 
     public void dropItem(String arg) {
         if (player.hasItem(arg)) {
-            if (arg == "FISTS") {
+            if (arg.equals("FISTS")) {
                 System.out.println("You can't drop your fists!");
             }
             else {
@@ -103,13 +121,16 @@ public class Game {
     }
 
     public void goRoom(String direction) {
-        System.out.println("You travel " + direction + ".");
         Room nextRoom = currentRoom.getNeighbor(direction);
         if (nextRoom == null) {
             System.out.println("There is no room in that direction");
         }
         else {
+            System.out.println("You regain 20 health");
+            player.changeHealth(20);
+            System.out.println("You travel " + direction + ".");
             currentRoom = nextRoom;
+            System.out.println("Current room: "+currentRoom.getName());
         }
     }
 
@@ -127,6 +148,23 @@ public class Game {
                 if (monster.isDead()) {
                     currentRoom.removeMonster();
                     System.out.println("You have slain the monster!");
+                    System.out.println("You feel like you have gotten stronger...");
+                    System.out.println("Attack power increased by 10!");
+                    player.changeAttackPower(10);
+                    System.out.println("Current attack power is: "+player.getAttackPower());
+                }
+                else {
+                    int rng = new Random().nextInt(monster.getAttackPower());
+                    int monsterDmg = Math.round(rng);
+                    System.out.println(monster.getName()+" attacks you for " + monsterDmg + " damage!");
+                    player.changeHealth(-monsterDmg);
+                    System.out.println("[PLAYER]: "+player.getCurrentHP()+"/"+player.getMaxHP()+" HP");
+                    if (player.isDead()) {
+                        System.out.println("Game over! You have died.");
+                        System.out.println("Returning to menu. Better luck next time");
+                        System.out.println("=============================================");
+                        running = false;
+                    }
                 }
             }
         }
