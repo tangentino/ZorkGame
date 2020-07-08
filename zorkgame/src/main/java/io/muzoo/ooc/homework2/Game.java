@@ -2,6 +2,7 @@ package io.muzoo.ooc.homework2;
 
 import io.muzoo.ooc.homework2.command.Command;
 import io.muzoo.ooc.homework2.command.CommandFactory;
+import io.muzoo.ooc.homework2.item.Food;
 import io.muzoo.ooc.homework2.item.Item;
 import io.muzoo.ooc.homework2.item.Weapon;
 import io.muzoo.ooc.homework2.map.FantasyMap;
@@ -174,15 +175,23 @@ public class Game {
         }
     }
 
+    public void eat(String arg) {
+        Item item = player.getItem(arg);
+        if (item != null && item instanceof Food) {
+            System.out.println("You regain "+((Food) item).getHealValue()+" health from eating "+item.getName()+"!");
+            player.changeHealth(((Food) item).getHealValue());
+            System.out.println("[PLAYER]: "+player.getCurrentHP()+"/"+player.getMaxHP()+" HP");
+        }
+        else {
+            System.out.println("You can't eat that!");
+        }
+    }
+
     private void parser() {
         Scanner scanner = new Scanner(System.in);
-        String line;
-
+        String line = scanner.nextLine();;
 
         System.out.print("> ");
-
-        line = scanner.nextLine();
-
 
         processCommandLine(line);
 
