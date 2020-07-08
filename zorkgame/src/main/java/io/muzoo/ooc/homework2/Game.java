@@ -7,6 +7,7 @@ import io.muzoo.ooc.homework2.item.Weapon;
 import io.muzoo.ooc.homework2.map.FantasyMap;
 import io.muzoo.ooc.homework2.map.GameMap;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
@@ -32,7 +33,7 @@ public class Game {
         System.out.println("You are currently in the menu");
         System.out.println("Type 'help' to see all the available commands");
         while (!running) {
-            parseCommand();
+            parser();
         }
     }
 
@@ -53,11 +54,11 @@ public class Game {
         }
     }
 
-    public void playGame() {
+    private void playGame() {
         printInfo();
         running = true;
         while (running) {
-            parseCommand();
+            parser();
         }
         System.out.println("Successfully exited to menu");
     }
@@ -130,7 +131,7 @@ public class Game {
             player.changeHealth(20);
             System.out.println("You travel " + direction + ".");
             currentRoom = nextRoom;
-            System.out.println("Current room: "+currentRoom.getName());
+            System.out.println("You arrive at "+currentRoom.getName());
         }
     }
 
@@ -144,7 +145,7 @@ public class Game {
                 int playerDmg = player.getAttackPower() + ((Weapon) item).getDamage();
                 monster.changeHealth(-playerDmg);
                 System.out.println("Attacked monster with " + item.getName() + " for " + playerDmg + " damage!");
-                System.out.println("[MONSTER]: "+monster.getCurrentHP()+"/"+monster.getMaxHP() +" HP");
+                System.out.println("["+monster.getName().toUpperCase()+"]: "+monster.getCurrentHP()+"/"+monster.getMaxHP() +" HP");
                 if (monster.isDead()) {
                     currentRoom.removeMonster();
                     System.out.println("You have slain the monster!");
@@ -173,17 +174,37 @@ public class Game {
         }
     }
 
-    public void parseCommand() {
+    private void parser() {
         Scanner scanner = new Scanner(System.in);
-        String input;
-        String cmdString = null;
-        String arg = null;
+        String line;
+
 
         System.out.print("> ");
 
-        input = scanner.nextLine();
-        Scanner parser = new Scanner(input); // scan input line
+        line = scanner.nextLine();
 
+
+        processCommandLine(line);
+
+    }
+
+    public void autopilot(String filename) {
+        try {
+            FileInputStream stream = new FileInputStream("src/main/autopilot/" + filename);
+            Scanner scanner = new Scanner(stream);
+            while (scanner.hasNextLine()) {
+                processCommandLine(scanner.nextLine());
+            }
+        }
+        catch (IOException e) {
+            System.out.println("File not found. Try again");
+        }
+    }
+
+    private void processCommandLine(String line) {
+        Scanner parser = new Scanner(line); // scan input line
+        String cmdString = null;
+        String arg = null;
         if (parser.hasNext()) {
             cmdString = parser.next(); // command word
             if(parser.hasNext()) {
@@ -198,8 +219,6 @@ public class Game {
         else {
             System.out.println("Invalid command. Type 'help' for list of commands");
         }
-
-
     }
 
 }
