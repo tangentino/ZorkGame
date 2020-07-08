@@ -11,7 +11,7 @@ public class EatCommand implements Command {
                 System.out.println("Eat what?");
             }
             else {
-                game.eat(cmd);
+                game.eat(cmd.toUpperCase());
             }
         }
         else {

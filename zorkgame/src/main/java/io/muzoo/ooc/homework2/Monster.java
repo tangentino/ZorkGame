@@ -1,6 +1,8 @@
 package io.muzoo.ooc.homework2;
 
-public class Monster {
+import java.io.Serializable;
+
+public class Monster implements Serializable {
 
     private int maxHP;
     private int currentHP;

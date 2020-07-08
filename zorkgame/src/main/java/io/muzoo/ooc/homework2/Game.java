@@ -8,12 +8,11 @@ import io.muzoo.ooc.homework2.item.Weapon;
 import io.muzoo.ooc.homework2.map.FantasyMap;
 import io.muzoo.ooc.homework2.map.GameMap;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Game {
+public class Game implements Serializable {
     private Player player;
     private Room currentRoom;
     private boolean running;
@@ -79,12 +78,12 @@ public class Game {
         System.out.println("=============================================");
         System.out.println("CURRENT ROOM: "+currentRoom.getName());
         System.out.println("---------------------------------------------");
-        System.out.println("[MONSTER]: "+monster.getName());
         Item item = currentRoom.getItem();
         if (monster == null) {
             System.out.println("No monster in this room");
         }
         else {
+            System.out.println("[MONSTER]: "+monster.getName());
             System.out.println("Health - " + monster.getCurrentHP() + "/" + monster.getMaxHP());
             System.out.println("Attack Power - " + monster.getAttackPower());
         }
@@ -102,9 +101,14 @@ public class Game {
 
     public void takeItems() {
         Item item = currentRoom.getItem();
-        System.out.println("Looted " + item.getName() + " from room!");
-        player.addItem(item);
-        currentRoom.removeItem();
+        if (item == null) {
+            System.out.println("Nothing to take!");
+        }
+        else {
+            System.out.println("Looted " + item.getName() + " from room!");
+            player.addItem(item);
+            currentRoom.removeItem();
+        }
     }
 
     public void dropItem(String arg) {
@@ -181,17 +185,67 @@ public class Game {
             System.out.println("You regain "+((Food) item).getHealValue()+" health from eating "+item.getName()+"!");
             player.changeHealth(((Food) item).getHealValue());
             System.out.println("[PLAYER]: "+player.getCurrentHP()+"/"+player.getMaxHP()+" HP");
+            player.removeItem(arg);
         }
         else {
             System.out.println("You can't eat that!");
         }
     }
 
-    private void parser() {
-        Scanner scanner = new Scanner(System.in);
-        String line = scanner.nextLine();;
+    public void save(String filename) {
+        try {
+            Player p = player;
+            Room room = currentRoom;
+            GameMap map = gameMap;
 
+            FileOutputStream file = new FileOutputStream(new File("src/main/saves/" + filename));
+            ObjectOutputStream output = new ObjectOutputStream(file);
+
+            output.writeObject(p);
+            output.writeObject(room);
+            output.writeObject(map);
+
+            System.out.println("Successfully saved game!");
+
+            file.close();
+            output.close();
+        }
+        catch (IOException e) {
+            System.out.println("Error saving game");
+        }
+    }
+
+    public void load(String filename) {
+        try {
+            FileInputStream file = new FileInputStream(new File("src/main/saves/" + filename));
+            ObjectInputStream input = new ObjectInputStream(file);
+
+            player = (Player) input.readObject();
+            currentRoom = (Room) input.readObject();
+            gameMap = (GameMap) input.readObject();
+
+            System.out.println("Successfully loaded game!");
+
+            file.close();
+            input.close();
+
+            playGame();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Save file not found");
+        }
+        catch (IOException e) {
+            System.out.println("Error loading game");
+        }
+        catch (ClassNotFoundException e) {
+            System.out.println("Error loading game");
+        }
+    }
+    private void parser() {
         System.out.print("> ");
+
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
 
         processCommandLine(line);
 

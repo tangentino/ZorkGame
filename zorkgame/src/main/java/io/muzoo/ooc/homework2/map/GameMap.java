@@ -2,7 +2,9 @@ package io.muzoo.ooc.homework2.map;
 
 import io.muzoo.ooc.homework2.Room;
 
-public interface GameMap {
+import java.io.Serializable;
+
+public interface GameMap extends Serializable {
     void printMap();
     Room getStartingRoom();
 }
