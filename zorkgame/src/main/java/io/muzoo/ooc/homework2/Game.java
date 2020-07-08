@@ -2,16 +2,17 @@ package io.muzoo.ooc.homework2;
 
 import io.muzoo.ooc.homework2.command.Command;
 import io.muzoo.ooc.homework2.command.CommandFactory;
+import io.muzoo.ooc.homework2.item.Food;
 import io.muzoo.ooc.homework2.item.Item;
 import io.muzoo.ooc.homework2.item.Weapon;
 import io.muzoo.ooc.homework2.map.FantasyMap;
 import io.muzoo.ooc.homework2.map.GameMap;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Game {
+public class Game implements Serializable {
     private Player player;
     private Room currentRoom;
     private boolean running;
@@ -32,7 +33,7 @@ public class Game {
         System.out.println("You are currently in the menu");
         System.out.println("Type 'help' to see all the available commands");
         while (!running) {
-            parseCommand();
+            parser();
         }
     }
 
@@ -53,11 +54,11 @@ public class Game {
         }
     }
 
-    public void playGame() {
+    private void playGame() {
         printInfo();
         running = true;
         while (running) {
-            parseCommand();
+            parser();
         }
         System.out.println("Successfully exited to menu");
     }
@@ -77,12 +78,12 @@ public class Game {
         System.out.println("=============================================");
         System.out.println("CURRENT ROOM: "+currentRoom.getName());
         System.out.println("---------------------------------------------");
-        System.out.println("[MONSTER]: "+monster.getName());
         Item item = currentRoom.getItem();
         if (monster == null) {
             System.out.println("No monster in this room");
         }
         else {
+            System.out.println("[MONSTER]: "+monster.getName());
             System.out.println("Health - " + monster.getCurrentHP() + "/" + monster.getMaxHP());
             System.out.println("Attack Power - " + monster.getAttackPower());
         }
@@ -100,9 +101,14 @@ public class Game {
 
     public void takeItems() {
         Item item = currentRoom.getItem();
-        System.out.println("Looted " + item.getName() + " from room!");
-        player.addItem(item);
-        currentRoom.removeItem();
+        if (item == null) {
+            System.out.println("Nothing to take!");
+        }
+        else {
+            System.out.println("Looted " + item.getName() + " from room!");
+            player.addItem(item);
+            currentRoom.removeItem();
+        }
     }
 
     public void dropItem(String arg) {
@@ -130,7 +136,7 @@ public class Game {
             player.changeHealth(20);
             System.out.println("You travel " + direction + ".");
             currentRoom = nextRoom;
-            System.out.println("Current room: "+currentRoom.getName());
+            System.out.println("You arrive at "+currentRoom.getName());
         }
     }
 
@@ -144,7 +150,7 @@ public class Game {
                 int playerDmg = player.getAttackPower() + ((Weapon) item).getDamage();
                 monster.changeHealth(-playerDmg);
                 System.out.println("Attacked monster with " + item.getName() + " for " + playerDmg + " damage!");
-                System.out.println("[MONSTER]: "+monster.getCurrentHP()+"/"+monster.getMaxHP() +" HP");
+                System.out.println("["+monster.getName().toUpperCase()+"]: "+monster.getCurrentHP()+"/"+monster.getMaxHP() +" HP");
                 if (monster.isDead()) {
                     currentRoom.removeMonster();
                     System.out.println("You have slain the monster!");
@@ -173,17 +179,95 @@ public class Game {
         }
     }
 
-    public void parseCommand() {
-        Scanner scanner = new Scanner(System.in);
-        String input;
-        String cmdString = null;
-        String arg = null;
+    public void eat(String arg) {
+        Item item = player.getItem(arg);
+        if (item != null && item instanceof Food) {
+            System.out.println("You regain "+((Food) item).getHealValue()+" health from eating "+item.getName()+"!");
+            player.changeHealth(((Food) item).getHealValue());
+            System.out.println("[PLAYER]: "+player.getCurrentHP()+"/"+player.getMaxHP()+" HP");
+            player.removeItem(arg);
+        }
+        else {
+            System.out.println("You can't eat that!");
+        }
+    }
 
+    public void save(String filename) {
+        try {
+            Player p = player;
+            Room room = currentRoom;
+            GameMap map = gameMap;
+
+            FileOutputStream file = new FileOutputStream(new File("src/main/saves/" + filename));
+            ObjectOutputStream output = new ObjectOutputStream(file);
+
+            output.writeObject(p);
+            output.writeObject(room);
+            output.writeObject(map);
+
+            System.out.println("Successfully saved game!");
+
+            file.close();
+            output.close();
+        }
+        catch (IOException e) {
+            System.out.println("Error saving game");
+        }
+    }
+
+    public void load(String filename) {
+        try {
+            FileInputStream file = new FileInputStream(new File("src/main/saves/" + filename));
+            ObjectInputStream input = new ObjectInputStream(file);
+
+            player = (Player) input.readObject();
+            currentRoom = (Room) input.readObject();
+            gameMap = (GameMap) input.readObject();
+
+            System.out.println("Successfully loaded game!");
+
+            file.close();
+            input.close();
+
+            playGame();
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("Save file not found");
+        }
+        catch (IOException e) {
+            System.out.println("Error loading game");
+        }
+        catch (ClassNotFoundException e) {
+            System.out.println("Error loading game");
+        }
+    }
+    private void parser() {
         System.out.print("> ");
 
-        input = scanner.nextLine();
-        Scanner parser = new Scanner(input); // scan input line
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
 
+        processCommandLine(line);
+
+    }
+
+    public void autopilot(String filename) {
+        try {
+            FileInputStream stream = new FileInputStream("src/main/autopilot/" + filename);
+            Scanner scanner = new Scanner(stream);
+            while (scanner.hasNextLine()) {
+                processCommandLine(scanner.nextLine());
+            }
+        }
+        catch (IOException e) {
+            System.out.println("File not found. Try again");
+        }
+    }
+
+    private void processCommandLine(String line) {
+        Scanner parser = new Scanner(line); // scan input line
+        String cmdString = null;
+        String arg = null;
         if (parser.hasNext()) {
             cmdString = parser.next(); // command word
             if(parser.hasNext()) {
@@ -198,8 +282,6 @@ public class Game {
         else {
             System.out.println("Invalid command. Type 'help' for list of commands");
         }
-
-
     }
 
 }

@@ -3,9 +3,10 @@ package io.muzoo.ooc.homework2;
 import io.muzoo.ooc.homework2.item.Item;
 import io.muzoo.ooc.homework2.item.Weapon;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Player {
+public class Player implements Serializable {
 
     private int currentHP;
     private int maxHP;

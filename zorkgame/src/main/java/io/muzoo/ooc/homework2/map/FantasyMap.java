@@ -2,6 +2,7 @@ package io.muzoo.ooc.homework2.map;
 
 import io.muzoo.ooc.homework2.Monster;
 import io.muzoo.ooc.homework2.Room;
+import io.muzoo.ooc.homework2.item.Food;
 import io.muzoo.ooc.homework2.item.Weapon;
 
 import java.io.*;
@@ -9,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class FantasyMap implements GameMap {
     private Room startingRoom;
-    private BufferedReader reader;
+    private transient BufferedReader reader;
 
     public FantasyMap() {
         try {
@@ -37,6 +38,7 @@ public class FantasyMap implements GameMap {
         village.setItem(new Weapon("LONGSWORD",20));
         dungeons.setItem(new Weapon("MORNINGSTAR",35));
         throne.setItem(new Weapon("KINGSLAYER",50));
+        courtyard.setItem(new Food("STEAK",50));
 
         // connect rooms
         village.addExit("east",courtyard);

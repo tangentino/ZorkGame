@@ -2,9 +2,10 @@ package io.muzoo.ooc.homework2;
 
 import io.muzoo.ooc.homework2.item.Item;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Room {
+public class Room implements Serializable {
     private Monster monster; // Room's monster
     private Item item; // List of items in room
     public HashMap<String,Room> neighbors; // Neighboring rooms

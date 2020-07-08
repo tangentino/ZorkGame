@@ -11,12 +11,10 @@ public class Food implements Item {
         this.healValue = healValue;
     }
 
-    public void eatFood(Player player) {
-        player.changeHealth(healValue);
-    }
-
     @Override
     public String getName() {
         return name;
     }
+
+    public int getHealValue() { return healValue; }
 }
