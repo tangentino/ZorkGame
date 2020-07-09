@@ -23,7 +23,7 @@ public class Game implements Serializable {
 
 
     public Game() {
-        player = new Player(100,25);
+        running = false;
     }
 
     public boolean isRunning() { return running; }
@@ -42,11 +42,12 @@ public class Game implements Serializable {
         System.out.println("[CURRENT ROOM]: "+currentRoom.getName());
     }
 
-    public void setGameMap(String name) {
-        switch (name) {
+    public void startNewGame(String map) {
+        switch (map) {
             case "fantasy":
                 gameMap = new FantasyMap();
                 currentRoom = gameMap.getStartingRoom();
+                player = new Player(100,25);
                 playGame();
                 break;
             default:
@@ -55,6 +56,7 @@ public class Game implements Serializable {
     }
 
     private void playGame() {
+        gameMap.loadMap();
         printInfo();
         running = true;
         while (running) {

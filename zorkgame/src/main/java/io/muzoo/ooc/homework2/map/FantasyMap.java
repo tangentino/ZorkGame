@@ -13,12 +13,7 @@ public class FantasyMap implements GameMap {
     private transient BufferedReader reader;
 
     public FantasyMap() {
-        try {
-            reader = new BufferedReader(new FileReader(new File("src/main/gamemaps/fantasy.txt")));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+
         // initialize rooms
         Room village = new Room("VILLAGE");
         Room courtyard = new Room("COURTYARD");
@@ -49,6 +44,16 @@ public class FantasyMap implements GameMap {
         palace.addExit("south",courtyard);
         palace.addExit("east",throne);
         throne.addExit("west",palace);
+    }
+
+    @Override
+    public void loadMap() {
+        try {
+            reader = new BufferedReader(new FileReader(new File("src/main/gamemaps/fantasy.txt")));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public void printMap() {

@@ -12,7 +12,7 @@ public class PlayCommand implements Command {
             System.out.println("Please enter a map to play");
         }
         else {
-            game.setGameMap(cmd.toLowerCase());
+            game.startNewGame(cmd.toLowerCase());
         }
     }
 }
