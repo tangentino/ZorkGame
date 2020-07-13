@@ -6,7 +6,7 @@ public abstract class Item implements Serializable {
     private String name;
     private int value;
 
-    public Item(String name, int value) {
+    protected Item(String name, int value) {
         this.name = name;
         this.value = value;
     }

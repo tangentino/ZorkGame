@@ -11,21 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class SpaceMap implements GameMap {
-    private Room startingRoom;
-    private StringBuilder mapLines;
+public class SpaceMap extends GameMap {
 
     public SpaceMap() {
-        mapLines = new StringBuilder();
-
-        try (Stream<String> stream = Files.lines(Paths.get("src/main/gamemaps/space.txt"), StandardCharsets.UTF_8)) {
-            // load map line by line and store into string
-            // so it doesn't have to read the file again every time we want to print map
-            stream.forEach(s -> mapLines.append(s).append("\n"));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        super("space.txt");
 
         // initialize maps
         Room shuttle = new Room("SHUTTLE BAY");
@@ -74,14 +63,10 @@ public class SpaceMap implements GameMap {
         infirmary.addExit("west",mess);
         war.addExit("north",mess);
 
-    }    @Override
-    public void printMap() {
-        System.out.println(mapLines.toString());
     }
 
-    @Override
-    public Room getStartingRoom() {
-        return startingRoom;
-    }
+
+
+
 
 }

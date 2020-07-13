@@ -11,21 +11,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class FantasyMap implements GameMap {
-    private Room startingRoom;
-    private StringBuilder mapLines;
+public class FantasyMap extends GameMap {
 
     public FantasyMap() {
-        mapLines = new StringBuilder();
-
-        try (Stream<String> stream = Files.lines(Paths.get("src/main/gamemaps/fantasy.txt"), StandardCharsets.UTF_8)) {
-            // load map line by line and store into string
-            // do this in constructor so it doesn't have to read the file everytime we call printMap()
-            stream.forEach(s -> mapLines.append(s).append("\n"));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        super("fantasy.txt");
 
         // initialize rooms
         Room village = new Room("VILLAGE");
@@ -33,7 +22,7 @@ public class FantasyMap implements GameMap {
         Room dungeons = new Room("DUNGEONS");
         Room palace = new Room("GRAND PALACE");
         Room throne = new Room("THRONE ROOM");
-
+        startingRoom = village;
 
         // add monsters to rooms
         village.setMonster(new Monster("Goblin Scout",100,25));
@@ -57,17 +46,5 @@ public class FantasyMap implements GameMap {
         palace.addExit("south",courtyard);
         palace.addExit("east",throne);
         throne.addExit("west",palace);
-
-        startingRoom = village;
-    }
-
-    @Override
-    public void printMap() {
-        System.out.println(mapLines.toString());
-    }
-
-    @Override
-    public Room getStartingRoom() {
-        return startingRoom;
     }
 }
