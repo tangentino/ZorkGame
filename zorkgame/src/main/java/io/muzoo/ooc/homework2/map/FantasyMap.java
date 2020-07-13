@@ -6,13 +6,26 @@ import io.muzoo.ooc.homework2.item.Food;
 import io.muzoo.ooc.homework2.item.Weapon;
 
 import java.io.*;
-import java.util.stream.Collectors;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 public class FantasyMap implements GameMap {
     private Room startingRoom;
-    private transient BufferedReader reader;
+    private StringBuilder mapLines;
 
     public FantasyMap() {
+        mapLines = new StringBuilder();
+
+        try (Stream<String> stream = Files.lines(Paths.get("src/main/gamemaps/fantasy.txt"), StandardCharsets.UTF_8)) {
+            // load map line by line and store into string
+            // do this in constructor so it doesn't have to read the file everytime we call printMap()
+            stream.forEach(s -> mapLines.append(s).append("\n"));
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // initialize rooms
         Room village = new Room("VILLAGE");
@@ -20,13 +33,13 @@ public class FantasyMap implements GameMap {
         Room dungeons = new Room("DUNGEONS");
         Room palace = new Room("GRAND PALACE");
         Room throne = new Room("THRONE ROOM");
-        startingRoom = village;
+
 
         // add monsters to rooms
         village.setMonster(new Monster("Goblin Scout",100,25));
         courtyard.setMonster(new Monster("Stone Guardian",150,35));
         dungeons.setMonster(new Monster("Torturer",250,40));
-        palace.setMonster(new Monster("King's Guard",300,50));
+        palace.setMonster(new Monster("Guard Commander",300,50));
         throne.setMonster(new Monster("Hand of the King",500,70));
 
         // add items
@@ -44,20 +57,13 @@ public class FantasyMap implements GameMap {
         palace.addExit("south",courtyard);
         palace.addExit("east",throne);
         throne.addExit("west",palace);
+
+        startingRoom = village;
     }
 
     @Override
-    public void loadMap() {
-        try {
-            reader = new BufferedReader(new FileReader(new File("src/main/gamemaps/fantasy.txt")));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    @Override
     public void printMap() {
-        System.out.println(reader.lines().collect(Collectors.joining(System.lineSeparator())));
+        System.out.println(mapLines.toString());
     }
 
     @Override

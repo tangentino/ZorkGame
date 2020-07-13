@@ -20,7 +20,7 @@ public class CommandFactory {
         cmdMap.put("take",new TakeCommand());
         cmdMap.put("save",new SaveCommand());
         cmdMap.put("play",new PlayCommand());
-        cmdMap.put("eat", new EatCommand());
+        cmdMap.put("use", new UseCommand());
     }
     public static Command getCommand(String cmd) {
         return cmdMap.get(cmd);

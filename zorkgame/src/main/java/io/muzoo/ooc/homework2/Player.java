@@ -18,7 +18,7 @@ public class Player implements Serializable {
         currentHP = health;
         attackPower = power;
         inventory = new HashMap<>();
-        Item fists = new Weapon("FISTS",10);
+        Item fists = new Weapon("FISTS",3);
         addItem(fists);
     }
 

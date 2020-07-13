@@ -7,6 +7,7 @@ import io.muzoo.ooc.homework2.item.Item;
 import io.muzoo.ooc.homework2.item.Weapon;
 import io.muzoo.ooc.homework2.map.FantasyMap;
 import io.muzoo.ooc.homework2.map.GameMap;
+import io.muzoo.ooc.homework2.map.SpaceMap;
 
 import java.io.*;
 import java.util.Random;
@@ -50,13 +51,18 @@ public class Game implements Serializable {
                 player = new Player(100,25);
                 playGame();
                 break;
+            case "space":
+                gameMap = new SpaceMap();
+                currentRoom = gameMap.getStartingRoom();
+                player = new Player(100,25);
+                playGame();
+                break;
             default:
                 System.out.println("Please enter a valid map!");
         }
     }
 
     private void playGame() {
-        gameMap.loadMap();
         printInfo();
         running = true;
         while (running) {
@@ -149,7 +155,7 @@ public class Game implements Serializable {
             if (monster == null) {
                 System.out.println("There is no monster to attack.");
             } else {
-                int playerDmg = player.getAttackPower() + ((Weapon) item).getDamage();
+                int playerDmg = player.getAttackPower() + item.getStatValue();
                 monster.changeHealth(-playerDmg);
                 System.out.println("Attacked monster with " + item.getName() + " for " + playerDmg + " damage!");
                 System.out.println("["+monster.getName().toUpperCase()+"]: "+monster.getCurrentHP()+"/"+monster.getMaxHP() +" HP");
@@ -181,16 +187,16 @@ public class Game implements Serializable {
         }
     }
 
-    public void eat(String arg) {
+    public void useItem(String arg) {
         Item item = player.getItem(arg);
         if (item != null && item instanceof Food) {
-            System.out.println("You regain "+((Food) item).getHealValue()+" health from eating "+item.getName()+"!");
-            player.changeHealth(((Food) item).getHealValue());
+            System.out.println("You regain "+item.getStatValue()+" health from "+item.getName()+"!");
+            player.changeHealth(item.getStatValue());
             System.out.println("[PLAYER]: "+player.getCurrentHP()+"/"+player.getMaxHP()+" HP");
             player.removeItem(arg);
         }
         else {
-            System.out.println("You can't eat that!");
+            System.out.println("You can't use that!");
         }
     }
 

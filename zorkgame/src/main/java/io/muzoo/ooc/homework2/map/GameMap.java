@@ -7,5 +7,4 @@ import java.io.Serializable;
 public interface GameMap extends Serializable {
     void printMap();
     Room getStartingRoom();
-    void loadMap();
 }
