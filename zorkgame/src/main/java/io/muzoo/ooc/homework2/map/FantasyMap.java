@@ -1,24 +1,14 @@
 package io.muzoo.ooc.homework2.map;
 
-import io.muzoo.ooc.homework2.Monster;
-import io.muzoo.ooc.homework2.Room;
+import io.muzoo.ooc.homework2.actor.Monster;
 import io.muzoo.ooc.homework2.item.Food;
 import io.muzoo.ooc.homework2.item.Weapon;
 
-import java.io.*;
-import java.util.stream.Collectors;
-
-public class FantasyMap implements GameMap {
-    private Room startingRoom;
-    private transient BufferedReader reader;
+public class FantasyMap extends GameMap {
 
     public FantasyMap() {
-        try {
-            reader = new BufferedReader(new FileReader(new File("src/main/gamemaps/fantasy.txt")));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        super("fantasy.txt");
+
         // initialize rooms
         Room village = new Room("VILLAGE");
         Room courtyard = new Room("COURTYARD");
@@ -28,17 +18,19 @@ public class FantasyMap implements GameMap {
         startingRoom = village;
 
         // add monsters to rooms
-        village.setMonster(new Monster("Goblin Scout",100,25));
+        village.setMonster(new Monster("Goblin Scout",100,35));
         courtyard.setMonster(new Monster("Stone Guardian",150,35));
-        dungeons.setMonster(new Monster("Torturer",250,40));
-        palace.setMonster(new Monster("King's Guard",300,50));
-        throne.setMonster(new Monster("Hand of the King",500,70));
+        dungeons.setMonster(new Monster("Torturer",250,25));
+        palace.setMonster(new Monster("Guard Commander",300,25));
+        Monster handOfTheKing = new Monster("Hand of the King",500,25);
+        throne.setMonster(handOfTheKing);
+        boss = handOfTheKing;
 
         // add items
         village.setItem(new Weapon("LONGSWORD",20));
-        dungeons.setItem(new Weapon("MORNINGSTAR",35));
-        throne.setItem(new Weapon("KINGSLAYER",50));
-        courtyard.setItem(new Food("STEAK",50));
+        dungeons.setItem(new Weapon("MORNINGSTAR",50));
+        throne.setItem(new Weapon("KINGSLAYER",75));
+        courtyard.setItem(new Food("STEAK",70));
 
         // connect rooms
         village.addExit("east",courtyard);
@@ -49,14 +41,5 @@ public class FantasyMap implements GameMap {
         palace.addExit("south",courtyard);
         palace.addExit("east",throne);
         throne.addExit("west",palace);
-    }
-    @Override
-    public void printMap() {
-        System.out.println(reader.lines().collect(Collectors.joining(System.lineSeparator())));
-    }
-
-    @Override
-    public Room getStartingRoom() {
-        return startingRoom;
     }
 }

@@ -1,5 +1,7 @@
 package io.muzoo.ooc.homework2;
 
+import io.muzoo.ooc.homework2.actor.Monster;
+import io.muzoo.ooc.homework2.actor.Player;
 import io.muzoo.ooc.homework2.command.Command;
 import io.muzoo.ooc.homework2.command.CommandFactory;
 import io.muzoo.ooc.homework2.item.Food;
@@ -7,6 +9,8 @@ import io.muzoo.ooc.homework2.item.Item;
 import io.muzoo.ooc.homework2.item.Weapon;
 import io.muzoo.ooc.homework2.map.FantasyMap;
 import io.muzoo.ooc.homework2.map.GameMap;
+import io.muzoo.ooc.homework2.map.Room;
+import io.muzoo.ooc.homework2.map.SpaceMap;
 
 import java.io.*;
 import java.util.Random;
@@ -18,20 +22,22 @@ public class Game implements Serializable {
     private boolean running;
     private GameMap gameMap;
 
-    // To-do list
-    // load save?
-
-
     public Game() {
-        player = new Player(100,25);
+        running = false;
     }
 
     public boolean isRunning() { return running; }
 
-    public void menuConsole() {
-        System.out.println("Welcome to Zork!");
+    public void printMenuMessage() {
+        System.out.println("-=[WELCOME TO ZORK!]=-");
         System.out.println("You are currently in the menu");
         System.out.println("Type 'help' to see all the available commands");
+        System.out.println("=============================================");
+        System.out.println("[MAPS]: fantasy | space |");
+    }
+
+    public void menuConsole() {
+        printMenuMessage();
         while (!running) {
             parser();
         }
@@ -42,11 +48,18 @@ public class Game implements Serializable {
         System.out.println("[CURRENT ROOM]: "+currentRoom.getName());
     }
 
-    public void setGameMap(String name) {
-        switch (name) {
+    public void startNewGame(String map) {
+        switch (map) {
             case "fantasy":
                 gameMap = new FantasyMap();
                 currentRoom = gameMap.getStartingRoom();
+                player = new Player(100,25);
+                playGame();
+                break;
+            case "space":
+                gameMap = new SpaceMap();
+                currentRoom = gameMap.getStartingRoom();
+                player = new Player(100,25);
                 playGame();
                 break;
             default:
@@ -57,10 +70,22 @@ public class Game implements Serializable {
     private void playGame() {
         printInfo();
         running = true;
+        Monster gameBoss = gameMap.getBoss();
         while (running) {
+            if (gameBoss.isDead()) {
+                // If boss is dead player wins
+                System.out.println("-=[VICTORY!]=-");
+                System.out.println("You have slain " + gameBoss.getName()+"!");
+                System.out.println("Congratulations! You have beaten the game!");
+                System.out.println("You will be returned to the menu");
+                System.out.println("=============================================");
+                break;
+            }
             parser();
         }
         System.out.println("Successfully exited to menu");
+        System.out.println("=============================================");
+        printMenuMessage();
     }
 
     public void quitGame() {
@@ -132,8 +157,8 @@ public class Game implements Serializable {
             System.out.println("There is no room in that direction");
         }
         else {
-            System.out.println("You regain 20 health");
-            player.changeHealth(20);
+            System.out.println("You regain 35 health");
+            player.changeHealth(35);
             System.out.println("You travel " + direction + ".");
             currentRoom = nextRoom;
             System.out.println("You arrive at "+currentRoom.getName());
@@ -147,7 +172,7 @@ public class Game implements Serializable {
             if (monster == null) {
                 System.out.println("There is no monster to attack.");
             } else {
-                int playerDmg = player.getAttackPower() + ((Weapon) item).getDamage();
+                int playerDmg = player.getAttackPower() + item.getStatValue();
                 monster.changeHealth(-playerDmg);
                 System.out.println("Attacked monster with " + item.getName() + " for " + playerDmg + " damage!");
                 System.out.println("["+monster.getName().toUpperCase()+"]: "+monster.getCurrentHP()+"/"+monster.getMaxHP() +" HP");
@@ -162,7 +187,7 @@ public class Game implements Serializable {
                 else {
                     int rng = new Random().nextInt(monster.getAttackPower());
                     int monsterDmg = Math.round(rng);
-                    System.out.println(monster.getName()+" attacks you for " + monsterDmg + " damage!");
+                    System.out.println(monster.getName() + " attacks you for " + monsterDmg + " damage!");
                     player.changeHealth(-monsterDmg);
                     System.out.println("[PLAYER]: "+player.getCurrentHP()+"/"+player.getMaxHP()+" HP");
                     if (player.isDead()) {
@@ -179,16 +204,16 @@ public class Game implements Serializable {
         }
     }
 
-    public void eat(String arg) {
+    public void useItem(String arg) {
         Item item = player.getItem(arg);
         if (item != null && item instanceof Food) {
-            System.out.println("You regain "+((Food) item).getHealValue()+" health from eating "+item.getName()+"!");
-            player.changeHealth(((Food) item).getHealValue());
+            System.out.println("You regain "+item.getStatValue()+" health from "+item.getName()+"!");
+            player.changeHealth(item.getStatValue());
             System.out.println("[PLAYER]: "+player.getCurrentHP()+"/"+player.getMaxHP()+" HP");
             player.removeItem(arg);
         }
         else {
-            System.out.println("You can't eat that!");
+            System.out.println("You can't use that!");
         }
     }
 
@@ -241,6 +266,7 @@ public class Game implements Serializable {
             System.out.println("Error loading game");
         }
     }
+
     private void parser() {
         System.out.print("> ");
 
@@ -278,6 +304,7 @@ public class Game implements Serializable {
         if (CommandFactory.isCommand(cmdString)) {
             Command cmd = CommandFactory.getCommand(cmdString);
             cmd.execute(arg,this);
+            System.out.println("=============================================");
         }
         else {
             System.out.println("Invalid command. Type 'help' for list of commands");

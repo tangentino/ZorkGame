@@ -1,0 +1,35 @@
+take
+attack longsword
+attack longsword
+attack longsword
+go east
+attack longsword
+attack longsword
+attack longsword
+take
+use steak
+go south
+take
+attack morningstar
+attack morningstar
+attack morningstar
+attack morningstar
+attack morningstar
+attack morningstar
+go north
+go north
+attack morningstar
+attack morningstar
+attack morningstar
+attack morningstar
+attack morningstar
+attack morningstar
+go east
+take
+attack kingslayer
+attack kingslayer
+attack kingslayer
+attack kingslayer
+attack kingslayer
+attack kingslayer
+attack kingslayer

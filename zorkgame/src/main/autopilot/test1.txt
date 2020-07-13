@@ -1,7 +1,0 @@
-take
-attack longsword
-attack longsword
-attack longsword
-attack longsword
-go east
-go south
