@@ -1,15 +1,8 @@
 package io.muzoo.ooc.homework2.map;
 
-import io.muzoo.ooc.homework2.Monster;
-import io.muzoo.ooc.homework2.Room;
+import io.muzoo.ooc.homework2.actor.Monster;
 import io.muzoo.ooc.homework2.item.Food;
 import io.muzoo.ooc.homework2.item.Weapon;
-
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
 
 public class FantasyMap extends GameMap {
 

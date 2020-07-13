@@ -1,5 +1,6 @@
-package io.muzoo.ooc.homework2;
+package io.muzoo.ooc.homework2.map;
 
+import io.muzoo.ooc.homework2.actor.Monster;
 import io.muzoo.ooc.homework2.item.Item;
 
 import java.io.Serializable;
@@ -59,11 +60,6 @@ public class Room implements Serializable {
 
     public void setMonster(Monster m) {
         monster = m;
-    }
-
-    public boolean hasMonster() {
-        // Check if room has a monster
-        return (!(monster == null));
     }
 
     public void removeMonster() {

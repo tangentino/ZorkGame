@@ -1,5 +1,7 @@
 package io.muzoo.ooc.homework2;
 
+import io.muzoo.ooc.homework2.actor.Monster;
+import io.muzoo.ooc.homework2.actor.Player;
 import io.muzoo.ooc.homework2.command.Command;
 import io.muzoo.ooc.homework2.command.CommandFactory;
 import io.muzoo.ooc.homework2.item.Food;
@@ -7,6 +9,7 @@ import io.muzoo.ooc.homework2.item.Item;
 import io.muzoo.ooc.homework2.item.Weapon;
 import io.muzoo.ooc.homework2.map.FantasyMap;
 import io.muzoo.ooc.homework2.map.GameMap;
+import io.muzoo.ooc.homework2.map.Room;
 import io.muzoo.ooc.homework2.map.SpaceMap;
 
 import java.io.*;
@@ -18,10 +21,6 @@ public class Game implements Serializable {
     private Room currentRoom;
     private boolean running;
     private GameMap gameMap;
-
-    // To-do list
-    // load save?
-
 
     public Game() {
         running = false;

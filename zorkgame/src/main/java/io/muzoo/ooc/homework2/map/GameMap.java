@@ -1,7 +1,5 @@
 package io.muzoo.ooc.homework2.map;
 
-import io.muzoo.ooc.homework2.Room;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
