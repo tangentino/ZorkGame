@@ -18,17 +18,19 @@ public class FantasyMap extends GameMap {
         startingRoom = village;
 
         // add monsters to rooms
-        village.setMonster(new Monster("Goblin Scout",100,25));
+        village.setMonster(new Monster("Goblin Scout",100,35));
         courtyard.setMonster(new Monster("Stone Guardian",150,35));
-        dungeons.setMonster(new Monster("Torturer",250,40));
-        palace.setMonster(new Monster("Guard Commander",300,50));
-        throne.setMonster(new Monster("Hand of the King",500,70));
+        dungeons.setMonster(new Monster("Torturer",250,25));
+        palace.setMonster(new Monster("Guard Commander",300,25));
+        Monster handOfTheKing = new Monster("Hand of the King",500,25);
+        throne.setMonster(handOfTheKing);
+        boss = handOfTheKing;
 
         // add items
         village.setItem(new Weapon("LONGSWORD",20));
-        dungeons.setItem(new Weapon("MORNINGSTAR",35));
-        throne.setItem(new Weapon("KINGSLAYER",50));
-        courtyard.setItem(new Food("STEAK",50));
+        dungeons.setItem(new Weapon("MORNINGSTAR",50));
+        throne.setItem(new Weapon("KINGSLAYER",75));
+        courtyard.setItem(new Food("STEAK",70));
 
         // connect rooms
         village.addExit("east",courtyard);

@@ -28,7 +28,9 @@ public class SpaceMap extends GameMap {
         mess.setMonster(new Monster("Gordon the Space Chef",450,60));
         war.setMonster(new Monster("Stormtrooper Captain",500,50));
         crew.setMonster(new Monster("Karen the Navigator",666,69));
-        cockpit.setMonster(new Monster("Darth Vader",1000,70));
+        Monster vader = new Monster("Darth Vader",1000,70);
+        cockpit.setMonster(vader);
+        boss = vader;
 
         // add items to rooms
         shuttle.setItem(new Weapon("GLOWSTICK",15));

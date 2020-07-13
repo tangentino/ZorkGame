@@ -1,5 +1,7 @@
 package io.muzoo.ooc.homework2.map;
 
+import io.muzoo.ooc.homework2.actor.Monster;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
@@ -10,6 +12,7 @@ import java.util.stream.Stream;
 public abstract class GameMap implements Serializable {
     private StringBuilder mapArt;
     protected Room startingRoom;
+    protected Monster boss;
 
     protected GameMap(String filename) {
         mapArt = new StringBuilder();
@@ -31,5 +34,7 @@ public abstract class GameMap implements Serializable {
     public Room getStartingRoom() {
         return startingRoom;
     }
+
+    public Monster getBoss() { return boss; }
 
 }
